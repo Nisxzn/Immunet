@@ -3,6 +3,8 @@ from backend.database.models import db, PacketStats, Threat, AttackMemory, Firew
 from backend.packet_capture.capture import start_sniffer
 import threading
 import os
+from datetime import datetime, timedelta
+from sqlalchemy import func
 
 def create_app():
     app = Flask(__name__)
@@ -28,10 +30,41 @@ def create_app():
 
     @app.route('/api/stats', methods=['GET'])
     def get_stats():
+        now = datetime.utcnow()
+        first_day_this_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        last_month_end = first_day_this_month - timedelta(seconds=1)
+        first_day_last_month = last_month_end.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
+        def get_comparison(model, filter_attr=None, filter_val=None):
+            total = model.query
+            if filter_attr and filter_val:
+                total = total.filter(getattr(model, filter_attr) == filter_val)
+            
+            count_total = total.count()
+            
+            this_month = total.filter(model.timestamp >= first_day_this_month).count()
+            last_month = total.filter(model.timestamp >= first_day_last_month, model.timestamp <= last_month_end).count()
+            
+            # Calculate change %
+            change = 0
+            if last_month > 0:
+                change = ((this_month - last_month) / last_month) * 100
+            elif this_month > 0:
+                change = 100 # Initial growth
+                
+            return count_total, f"{change:+.1f}%"
+
+        p_total, p_change = get_comparison(PacketStats)
+        t_total, t_change = get_comparison(Threat)
+        b_total, b_change = get_comparison(FirewallRule, 'action', 'BLOCK')
+
         return jsonify({
-            'total_packets': PacketStats.query.count(),
-            'total_threats': Threat.query.count(),
-            'total_blocked': FirewallRule.query.filter_by(action='BLOCK').count()
+            'total_packets': p_total,
+            'packet_change': p_change,
+            'total_threats': t_total,
+            'threat_change': t_change,
+            'total_blocked': b_total,
+            'blocked_change': b_change
         })
 
     @app.route('/api/packets', methods=['GET'])
