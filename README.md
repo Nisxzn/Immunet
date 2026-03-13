@@ -1,10 +1,6 @@
 # 🛡️ Immunet: Biological Intrusion Detection System
 
 <p align="center">
-  <img src="assets/banner.png" alt="Immunet Banner" width="100%">
-</p>
-
-<p align="center">
   <img src="https://img.shields.io/badge/Version-1.0.0-blue?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Status-Active-green?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/Stack-React%20%2B%20Flask-orange?style=for-the-badge" alt="Stack">
@@ -29,10 +25,6 @@ Built with a focus on high-performance packet capture and a premium user experie
 - 📊 **Dynamic Dashboard**: Interactive visualizations of network throughput, threat levels, and system performance.
 - 🧱 **Active Firewall**: Robust management of inbound and outbound rules with real-time status updates.
 - 🚨 **Threat Intelligence**: Multi-stage classification of network activities into Safe, Suspicious, or Malicious categories.
-
-<p align="center">
-  <img src="assets/dashboard.png" alt="Immunet Dashboard" width="90%">
-</p>
 
 ---
 
@@ -95,7 +87,6 @@ npm run dev
 ## 📂 Project Structure
 
 ```text
-├── assets/             # Documentation assets & images
 ├── backend/            # Flask API & Security Engines
 │   ├── packet_capture/ # Scapy-based monitoring
 │   ├── detection/      # Threat classification logic
