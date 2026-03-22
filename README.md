@@ -111,5 +111,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 <p align="center">
-  Developed by <b>Nisxzn</b>
+  Developed by <b>Nithish</b>
 </p>
